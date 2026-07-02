@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
+
+import { loginUser } from "../services/authService";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -10,31 +12,27 @@ const Login = () => {
     email: "",
     password: "",
   });
+
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      setLoading(true);
 
-      const data = await response.json();
+      const data = await loginUser(formData);
 
       if (data.success) {
         localStorage.setItem("token", data.token);
-
         localStorage.setItem("userName", data.user.name);
 
         toast.success("Login Successful");
@@ -44,12 +42,15 @@ const Login = () => {
         toast.error(data.message);
       }
     } catch (error) {
+      console.log(error);
       toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100 relative">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100">
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-4">
         <div className="text-purple-600 text-4xl font-bold mb-8">StudySync</div>
 
@@ -70,7 +71,7 @@ const Login = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter email"
-                className="w-full border border-gray-200 rounded-xl px-4 py-2 mt-2"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 mt-2 outline-none focus:ring-2 focus:ring-purple-500"
                 required
               />
             </div>
@@ -85,7 +86,7 @@ const Login = () => {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Enter password"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2 pr-12"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
 
@@ -101,17 +102,18 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full bg-purple-500 hover:bg-purple-600 transition text-white py-3 rounded-xl"
+              disabled={loading}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl font-semibold disabled:opacity-60"
             >
-              Sign In
+              {loading ? "Signing In..." : "Sign In"}
             </button>
           </form>
 
-          <button className="w-full border hover:bg-purple-400 border-gray-200 py-3 rounded-xl mt-4">
+          <button className="w-full border border-gray-200 py-3 rounded-xl mt-4 hover:bg-gray-100 transition">
             Continue with Google
           </button>
 
-          <p className="text-center text-gray-500 mt-4">
+          <p className="text-center text-gray-500 mt-5">
             Don't have an account?
             <Link to="/signup" className="text-purple-600 ml-1 hover:underline">
               Sign Up
@@ -119,22 +121,20 @@ const Login = () => {
           </p>
         </div>
 
-        <Link
-          to="/"
-          className="mt-10 text-gray-500 text-sm hover:text-gray-900"
-        >
-          ← Back to home
+        <Link to="/" className="mt-10 text-gray-500 text-sm hover:text-black">
+          ← Back to Home
         </Link>
       </div>
 
-      <div className="hidden lg:flex w-1/2 bg-linear-to-br from-indigo-500 to-purple-400 items-center justify-center">
-        <div className="text-white">
-          <h1 className="text-4xl text-center font-bold">
-            Built for focus. Loved by <br />
-            students.
+      <div className="hidden lg:flex w-1/2 bg-linear-to-br from-indigo-500 to-purple-500 items-center justify-center">
+        <div className="text-white text-center px-10">
+          <h1 className="text-5xl font-bold">
+            Built for focus.
+            <br />
+            Loved by students.
           </h1>
 
-          <p className="mt-5 text-lg">
+          <p className="mt-6 text-lg">
             Your tasks, notes, and study sessions — all synced in one calm
             workspace.
           </p>

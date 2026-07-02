@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+
     email: {
       type: String,
       required: true,
@@ -14,13 +15,45 @@ const UserSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
+
     password: {
       type: String,
       required: true,
     },
+
     avatar: {
       type: String,
       default: "",
+    },
+
+    college: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    course: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    semester: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    about: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    phone: {
+      type: String,
+      default: "",
+      trim: true,
     },
 
     studyStreak: {
@@ -33,9 +66,11 @@ const UserSchema = new mongoose.Schema(
       default: 0,
     },
   },
-
-  { timestamps: true },
+  {
+    timestamps: true,
+  },
 );
+
 const User = mongoose.model("User", UserSchema);
 
 export default User;

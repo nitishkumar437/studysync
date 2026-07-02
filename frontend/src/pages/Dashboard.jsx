@@ -1,86 +1,122 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
+
+import DashboardLayout from "../components/layout/DashboardLayout";
+
 import Hero from "../components/dashboard/Hero";
-import StatCard from "../components/cards/StatCard";
-import { TrendingUp, Clock3, CheckCircle, Flame } from "lucide-react";
 import ProductivityChart from "../components/dashboard/ProductivityChart";
 import TaskList from "../components/dashboard/TaskList";
-import CourseProgress from "../components/dashboard/CourseProgress";
+import RecentNotes from "../components/dashboard/RecentNotes";
+import StatCard from "../components/cards/StatCard";
+import QuickActions from "../components/dashboard/QuickActions";
+import { TrendingUp, Clock3, CheckCircle, BookOpen } from "lucide-react";
+
+import { getDashboardStats } from "../services/dashboardService";
+
 const Dashboard = () => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userName");
+  const [stats, setStats] = useState({
+    totalTasks: 0,
+    completedTasks: 0,
+    pendingTasks: 0,
+    totalNotes: 0,
+    completionRate: 0,
+  });
+  const [todayTasks, setTodayTasks] = useState([]);
+  const [weeklyData, setWeeklyData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [recentNotes, setRecentNotes] = useState([]);
+  const fetchDashboardStats = async () => {
+    try {
+      const data = await getDashboardStats();
 
-    navigate("/login");
+      if (data.success) {
+        setStats(data.stats);
+        setTodayTasks(data.todayTasks || []);
+        setWeeklyData(data.weeklyData || []);
+        setRecentNotes(data.recentNotes || []);
+      }
+    } catch (error) {
+      console.log("Dashboard Error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
-  const userName = localStorage.getItem("userName");
+
+  
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (!token) {
       navigate("/login");
+      return;
     }
+
+    fetchDashboardStats();
   }, [navigate]);
 
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="flex flex-col items-center justify-center h-[60vh]">
+          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+
+          <p className="mt-5 text-gray-500 font-medium">Loading Dashboard...</p>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
-    <div className="flex min-h-screen bg-[#f8f9fc]">
-      <Sidebar />
+    <DashboardLayout>
+      <div className="max-w-425 mx-auto">
+        <Hero stats={stats} />
 
-      <div className="flex-1">
-        <Navbar />
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-10">
+          <StatCard
+            title="Total Tasks"
+            value={stats.totalTasks}
+            subtitle="All Tasks"
+            icon={<CheckCircle size={22} />}
+          />
 
-        <main className="p-8">
-          <Hero />
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-8">
-            <StatCard
-              title="Focus Score"
-              value="92%"
-              subtitle="+12% this week"
-              icon={<TrendingUp size={22} />}
-            />
+          <StatCard
+            title="Completed"
+            value={stats.completedTasks}
+            subtitle={`${stats.completionRate}% Completed`}
+            icon={<TrendingUp size={22} />}
+          />
 
-            <StatCard
-              title="Study Hours"
-              value="24.5h"
-              subtitle="Weekly"
-              icon={<Clock3 size={22} />}
-            />
+          <StatCard
+            title="Pending"
+            value={stats.pendingTasks}
+            subtitle="Need Attention"
+            icon={<Clock3 size={22} />}
+          />
 
-            <StatCard
-              title="Tasks Done"
-              value="14/20"
-              subtitle="70% completed"
-              icon={<CheckCircle size={22} />}
-            />
+          <StatCard
+            title="Notes"
+            value={stats.totalNotes}
+            subtitle="Saved Notes"
+            icon={<BookOpen size={22} />}
+          />
+        </div>
 
-            <StatCard
-              title="Streak"
-              value="12d"
-              subtitle="Personal best!"
-              icon={<Flame size={22} />}
-            />
+        <div className="grid grid-cols-1 2xl:grid-cols-3 gap-6 mt-10">
+          <div className="xl:col-span-2">
+            <ProductivityChart weeklyData={weeklyData} />
           </div>
-          <div className="grid grid-cols-3 gap-6 mt-8">
-            <div className="col-span-2">
-              <ProductivityChart />
-            </div>
 
-            <TaskList />
-          </div>
-          <CourseProgress subject="DBMS" progress={75} />
-        </main>
-        {/* <button
-          onClick={handleLogout}
-          className="bg-red-500 text-white px-4 py-2 rounded"
-        >
-          Logout
-        </button> */}
+          <TaskList tasks={todayTasks} />
+        </div>
+        <div className="grid grid-cols-1 2xl:grid-cols-2 gap-6 mt-10">
+          <QuickActions />
+
+          <RecentNotes notes={recentNotes} />
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

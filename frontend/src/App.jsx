@@ -5,7 +5,11 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import "./App.css";
 import { Toaster } from "react-hot-toast";
-
+import Notes from "./pages/Notes.jsx";
+import Tasks from "./pages/Tasks.jsx";
+import Planner from "./pages/Planner.jsx";
+import Profile from "./pages/Profile.jsx";
+import "react-easy-crop/react-easy-crop.css";
 function App() {
   return (
     <>
@@ -23,6 +27,10 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/notes" element={<Notes />} />
+        <Route path="/tasks" element={<Tasks />} />
+        <Route path="/planner" element={<Planner />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </>
   );
