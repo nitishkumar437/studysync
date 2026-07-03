@@ -1,4 +1,4 @@
-const API_URL = `${import.meta.env.VITE_API_URL}/planner`;
+const API_URL = `${import.meta.env.VITE_API_URL}/api/planner`;
 
 const getToken = () => localStorage.getItem("token");
 

@@ -1,4 +1,4 @@
-const API_URL = `${import.meta.env.VITE_API_URL}/profile`;
+const API_URL = `${import.meta.env.VITE_API_URL}/api/profile`;
 
 const getToken = () => localStorage.getItem("token");
 
@@ -23,7 +23,7 @@ const handleResponse = async (response, message) => {
 
   return data;
 };
- 
+
 export const getProfile = async () => {
   const response = await fetch(API_URL, {
     headers: getHeaders(),
@@ -31,7 +31,7 @@ export const getProfile = async () => {
 
   return handleResponse(response, "Failed to fetch profile");
 };
- 
+
 export const updateProfile = async (profileData) => {
   const response = await fetch(API_URL, {
     method: "PUT",
@@ -41,7 +41,7 @@ export const updateProfile = async (profileData) => {
 
   return handleResponse(response, "Failed to update profile");
 };
- 
+
 export const changePassword = async (passwordData) => {
   const response = await fetch(`${API_URL}/change-password`, {
     method: "PUT",
@@ -52,7 +52,6 @@ export const changePassword = async (passwordData) => {
   return handleResponse(response, "Failed to change password");
 };
 
- 
 export const uploadProfilePhoto = async (formData) => {
   const response = await fetch(`${API_URL}/upload-photo`, {
     method: "PUT",
