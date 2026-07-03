@@ -45,8 +45,7 @@ const ImageCropModal = ({ image, onClose, onUpload, uploading }) => {
             <X size={24} />
           </button>
         </div>
-
-        {/* Crop Area */}
+ 
 
         <div className="bg-gray-900 flex items-center justify-center h-130">
           <AvatarEditor
@@ -63,7 +62,7 @@ const ImageCropModal = ({ image, onClose, onUpload, uploading }) => {
           />
         </div>
 
-        {/* Zoom */}
+   
 
         <div className="px-8 py-6">
           <div className="flex justify-between mb-3">
@@ -85,7 +84,7 @@ const ImageCropModal = ({ image, onClose, onUpload, uploading }) => {
           />
         </div>
 
-        {/* Footer */}
+    
 
         <div className="flex justify-end gap-4 px-8 pb-8">
           <button

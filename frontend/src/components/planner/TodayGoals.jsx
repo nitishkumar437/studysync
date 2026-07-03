@@ -30,7 +30,7 @@ const TodayGoals = ({ planners = [] }) => {
 
   return (
     <div className="bg-white rounded-3xl p-5 md:p-7 shadow-sm border border-gray-100">
-      {/* Header */}
+ 
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -59,8 +59,7 @@ const TodayGoals = ({ planners = [] }) => {
           {completed}/{todayGoals.length} Done
         </span>
       </div>
-
-      {/* Content */}
+ 
 
       <div className="mt-6 space-y-4">
         {todayGoals.length === 0 ? (
@@ -132,7 +131,7 @@ const TodayGoals = ({ planners = [] }) => {
                 </div>
               </div>
 
-              {/* Right */}
+          
 
               <div className="flex md:flex-col items-start md:items-end gap-3">
                 <span

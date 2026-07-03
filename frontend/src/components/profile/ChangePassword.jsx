@@ -100,7 +100,6 @@ const ChangePassword = () => {
           </div>
         </div>
 
-        {/* New Password */}
         <div>
           <label className="block mb-2 font-medium">New Password</label>
 
@@ -125,7 +124,6 @@ const ChangePassword = () => {
           </div>
         </div>
 
-        {/* Confirm Password */}
         <div>
           <label className="block mb-2 font-medium">Confirm Password</label>
 
@@ -153,7 +151,7 @@ const ChangePassword = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold hover:opacity-90 transition disabled:opacity-60"
+          className="w-full py-3 rounded-xl bg-linear-to-r from-indigo-600 to-purple-600 text-white font-semibold hover:opacity-90 transition disabled:opacity-60"
         >
           {loading ? "Updating Password..." : "Change Password"}
         </button>

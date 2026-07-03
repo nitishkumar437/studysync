@@ -41,7 +41,7 @@ const HoursToday = ({ planners = [] }) => {
 
   return (
     <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 hover:shadow-lg transition-all duration-300">
-      {/* Header */}
+   
 
       <div className="flex items-center justify-between">
         <div>
@@ -55,8 +55,7 @@ const HoursToday = ({ planners = [] }) => {
         </div>
       </div>
 
-      {/* Hours */}
-
+    
       <div className="mt-8">
         <h1 className="text-4xl md:text-5xl font-bold text-indigo-600">
           {completedHours.toFixed(1)}
@@ -70,7 +69,7 @@ const HoursToday = ({ planners = [] }) => {
         <p className="text-gray-500 mt-2">Completed Study Hours</p>
       </div>
 
-      {/* Progress */}
+     
 
       <div className="mt-8">
         <div className="flex justify-between text-sm text-gray-500 mb-2">
@@ -120,8 +119,7 @@ const HoursToday = ({ planners = [] }) => {
           <p className="text-gray-600 mt-2 text-sm">Remaining</p>
         </div>
       </div>
-
-      {/* Empty State */}
+ 
 
       {todaySessions.length === 0 && (
         <div className="mt-8 border border-dashed border-gray-200 rounded-2xl p-8 text-center">

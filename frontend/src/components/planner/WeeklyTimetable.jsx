@@ -84,7 +84,7 @@ const WeeklyTimetable = ({ planners = [] }) => {
                 key={day.key}
                 className="border border-gray-100 rounded-3xl overflow-hidden"
               >
-                {/* Day Header */}
+               
 
                 <div className="bg-linear-to-r from-indigo-50 to-purple-50 px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                   <h3 className="text-xl font-bold text-indigo-700">
@@ -96,8 +96,7 @@ const WeeklyTimetable = ({ planners = [] }) => {
                     {sessions.length > 1 ? "s" : ""}
                   </span>
                 </div>
-
-                {/* Sessions */}
+ 
 
                 <div className="p-5 space-y-4">
                   {sessions.map((planner) => {
@@ -149,8 +148,7 @@ const WeeklyTimetable = ({ planners = [] }) => {
                             )}
                           </div>
                         </div>
-
-                        {/* Bottom */}
+ 
 
                         <div className="flex flex-wrap gap-6 mt-5 text-gray-500 text-sm">
                           <div className="flex items-center gap-2">

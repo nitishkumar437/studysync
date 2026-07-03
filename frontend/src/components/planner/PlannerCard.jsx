@@ -51,7 +51,7 @@ const PlannerCard = ({ planner, onEdit, onDelete, onToggleStatus }) => {
       `}
     >
       <div className="flex flex-col lg:flex-row lg:justify-between gap-6">
-        {/* Left */}
+     
         <div className="flex gap-4 flex-1">
           <button
             onClick={() => onToggleStatus(planner)}
@@ -116,7 +116,7 @@ const PlannerCard = ({ planner, onEdit, onDelete, onToggleStatus }) => {
           </div>
         </div>
 
-        {/* Right */}
+ 
         <div className="flex lg:flex-col justify-end gap-3">
           <button
             onClick={() => onEdit(planner)}

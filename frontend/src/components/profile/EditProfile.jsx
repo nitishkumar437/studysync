@@ -159,7 +159,7 @@ const EditProfile = ({ user, refreshProfile }) => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full py-3 rounded-xl bg-linear-to-r from-indigo-600 to-purple-600 text-white font-semibold hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {loading ? "Saving..." : "Save Changes"}
         </button>
