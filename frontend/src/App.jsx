@@ -10,13 +10,13 @@ import Tasks from "./pages/Tasks.jsx";
 import Planner from "./pages/Planner.jsx";
 import Profile from "./pages/Profile.jsx";
 import "react-easy-crop/react-easy-crop.css";
+import Home from "./pages/Home.jsx";
 function App() {
   return (
     <>
       <Toaster position="top-right" />
 
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
         <Route
           path="/dashboard"
           element={
@@ -25,6 +25,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/notes" element={<Notes />} />

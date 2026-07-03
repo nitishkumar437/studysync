@@ -13,7 +13,7 @@ const DashboardLayout = ({ children }) => {
         <Navbar setSidebarOpen={setSidebarOpen} />
 
         <main
-          className="  pt-24
+          className="pt-24
             px-4
             pb-6
             md:px-6

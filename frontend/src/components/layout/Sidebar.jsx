@@ -5,9 +5,9 @@ import {
   Calendar,
   User,
   LogOut,
-  GraduationCap,
   X,
 } from "lucide-react";
+import logo from "../../assets/logo.png";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
@@ -60,13 +60,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-linear-to-r from-purple-500 to-violet-600 shadow-lg">
-              <GraduationCap size={22} className="text-white" />
-            </div>
+            <img
+              src={logo}
+              alt="StudySync Logo"
+              className="w-12 h-12 object-contain"
+            />
 
-            <span className="text-2xl lg:text-3xl font-extrabold bg-linear-to-r from-purple-600 to-violet-500 bg-clip-text text-transparent">
-              StudySync
-            </span>
+            <h1 className="text-3xl font-bold">
+              <span className="text-gray-900">Study</span>
+              <span className="text-violet-600">Sync</span>
+            </h1>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
