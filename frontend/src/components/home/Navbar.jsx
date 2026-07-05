@@ -21,7 +21,7 @@ const Navbar = () => {
             className="w-12 h-12 object-contain"
           />
 
-          <h1 className="text-3xl font-bold">
+          <h1 className="text-2xl md:text-3xl font-bold">
             <span className="text-gray-900">Study</span>
             <span className="text-violet-600">Sync</span>
           </h1>

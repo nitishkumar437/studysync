@@ -28,7 +28,7 @@ const Testimonials = () => {
   return (
     <section
       id="testimonials"
-      className="py-24 bg-lineae-to-b from-white to-indigo-50"
+      className="py-24 bg-linear-to-b from-white to-indigo-50"
     >
       <div className="max-w-7xl mx-auto px-6">
         

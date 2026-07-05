@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 
 import { loginUser } from "../services/authService";
+
+import AuthHeader from "../components/common/AuthHeader";
+import AuthSidePanel from "../components/common/AuthSidePanel";
+import PasswordInput from "../components/common/PasswordInput";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,7 +16,6 @@ const Login = () => {
     password: "",
   });
 
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -50,14 +52,15 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100">
+    <div className="h-screen flex flex-col lg:flex-row bg-gray-100 overflow-hidden">
+   
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-4">
-        <div className="text-purple-600 text-4xl font-bold mb-8">StudySync</div>
+        <AuthHeader />
 
         <div className="bg-white p-6 md:p-10 rounded-3xl shadow-md w-full max-w-md">
           <h1 className="text-4xl md:text-5xl font-bold">Welcome back</h1>
 
-          <p className="text-gray-500 mb-8 mt-2">
+          <p className="text-gray-500 mt-2 mb-8">
             Sign in to continue your study streak.
           </p>
 
@@ -70,40 +73,18 @@ const Login = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Enter email"
+                placeholder="Enter your email"
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 mt-2 outline-none focus:ring-2 focus:ring-purple-500"
                 required
               />
             </div>
 
-            <div>
-              <label className="font-medium">Password</label>
-
-              <div className="relative mt-2">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Enter password"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-purple-500"
-                  required
-                />
-
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
-            </div>
+            <PasswordInput value={formData.password} onChange={handleChange} />
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl font-semibold disabled:opacity-60"
+              className="w-full bg-purple-600 hover:bg-purple-700 transition text-white py-3 rounded-xl font-semibold disabled:opacity-60"
             >
               {loading ? "Signing In..." : "Sign In"}
             </button>
@@ -121,25 +102,13 @@ const Login = () => {
           </p>
         </div>
 
-        <Link to="/" className="mt-10 text-gray-500 text-sm hover:text-black">
+        <Link to="/" className="mt-8 text-gray-500 text-sm hover:text-black">
           ← Back to Home
         </Link>
       </div>
 
-      <div className="hidden lg:flex w-1/2 bg-linear-to-br from-indigo-500 to-purple-500 items-center justify-center">
-        <div className="text-white text-center px-10">
-          <h1 className="text-5xl font-bold">
-            Built for focus.
-            <br />
-            Loved by students.
-          </h1>
-
-          <p className="mt-6 text-lg">
-            Your tasks, notes, and study sessions — all synced in one calm
-            workspace.
-          </p>
-        </div>
-      </div>
+      
+      <AuthSidePanel />
     </div>
   );
 };

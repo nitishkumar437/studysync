@@ -73,7 +73,7 @@ const Features = () => {
             return (
               <div
                 key={index}
-                className="bg-white rounded-3xl p-8 shadow-md border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
+                className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
               >
                 <div className="w-16 h-16 rounded-2xl bg-linear-to-r from-indigo-600 to-purple-600 flex items-center justify-center text-white">
                   <Icon size={32} />

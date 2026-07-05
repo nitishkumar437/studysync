@@ -11,6 +11,7 @@ import Planner from "./pages/Planner.jsx";
 import Profile from "./pages/Profile.jsx";
 import "react-easy-crop/react-easy-crop.css";
 import Home from "./pages/Home.jsx";
+
 function App() {
   return (
     <>
