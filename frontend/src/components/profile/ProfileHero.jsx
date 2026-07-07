@@ -19,7 +19,7 @@ const ProfileHero = ({ user, refreshProfile }) => {
     const file = e.target.files?.[0];
 
     if (!file) return;
-
+ 
     if (file.size > 5 * 1024 * 1024) {
       toast.error("Image size should be less than 5 MB");
       return;

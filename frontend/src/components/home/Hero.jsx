@@ -15,9 +15,10 @@ const Hero = () => {
         <h1 className="mt-8 text-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight">
           Master your studies with
           <br />
-          <span className="bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            StudySync
-          </span>
+          <h1 className="text-2xl md:text-3xl font-bold">
+            <span className="text-gray-900">Study</span>
+            <span className="text-violet-600">Sync</span>
+          </h1>
         </h1>
 
         <p className="max-w-2xl mx-auto mt-6 text-center text-lg text-gray-600 leading-8">

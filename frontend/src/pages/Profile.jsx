@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
 
 import DashboardLayout from "../components/layout/DashboardLayout";
 import ProfileHero from "../components/profile/ProfileHero";
@@ -11,16 +12,23 @@ import { getProfile } from "../services/profileService";
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const fetchProfile = async () => {
-    try {
+    try { 
+      setLoading(true);
+      setError("");
+
       const data = await getProfile();
 
       if (data.success) {
         setUser(data.user);
+      } else {
+        setError(data.message || "Failed to load profile.");
       }
     } catch (error) {
-      console.log("Error fetching profile:", error);
+      console.error("Error fetching profile:", error);
+      setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -33,10 +41,26 @@ const Profile = () => {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="flex items-center justify-center h-[70vh]">
-          <h2 className="text-2xl font-semibold text-gray-500">
-            Loading Profile...
-          </h2>
+        <div className="flex flex-col items-center justify-center h-[70vh] gap-4">
+          <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
+          <p className="text-lg text-gray-500">Loading Profile...</p>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <DashboardLayout>
+        <div className="flex flex-col items-center justify-center h-[70vh] gap-4">
+          <h2 className="text-2xl font-semibold text-red-500">{error}</h2>
+
+          <button
+            onClick={fetchProfile}
+            className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          >
+            Retry
+          </button>
         </div>
       </DashboardLayout>
     );
@@ -45,7 +69,6 @@ const Profile = () => {
   return (
     <DashboardLayout>
       <div className="max-w-7xl mx-auto">
-         
         <div className="mb-8">
           <h1 className="text-5xl font-bold text-gray-900">My Profile</h1>
 
@@ -53,15 +76,13 @@ const Profile = () => {
             Manage your personal information and account settings.
           </p>
         </div>
- 
+
         <ProfileHero user={user} refreshProfile={fetchProfile} />
 
-     
         <div className="my-8">
           <StatsCard user={user} notesCount={15} plannerCount={8} />
         </div>
 
-     
         <div className="space-y-8">
           <EditProfile user={user} refreshProfile={fetchProfile} />
 

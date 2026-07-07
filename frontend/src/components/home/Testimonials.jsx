@@ -1,5 +1,5 @@
 import { Star } from "lucide-react";
-
+import nitish from "..//../assets/nitish.png";
 const testimonials = [
   {
     name: "Rahul Kumar",
@@ -16,9 +16,9 @@ const testimonials = [
       "The task planner keeps me on track every day. I never miss deadlines anymore. Highly recommended for every student.",
   },
   {
-    name: "Aman Singh",
-    course: "Engineering Student",
-    image: "https://i.pravatar.cc/150?img=18",
+    name: "Nitish Singh",
+    course: "BCA Student",
+    image: nitish,
     review:
       "Beautiful interface, responsive design and everything is organized in one place. This is exactly what students need.",
   },
@@ -31,8 +31,6 @@ const Testimonials = () => {
       className="py-24 bg-linear-to-b from-white to-indigo-50"
     >
       <div className="max-w-7xl mx-auto px-6">
-        
-
         <div className="text-center">
           <span className="px-4 py-2 rounded-full bg-indigo-100 text-indigo-700 font-semibold text-sm">
             Testimonials
@@ -49,32 +47,25 @@ const Testimonials = () => {
           </p>
         </div>
 
-   
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-20">
           {testimonials.map((item, index) => (
             <div
               key={index}
               className="bg-white rounded-3xl p-8 shadow-md border border-gray-100 hover:-translate-y-2 hover:shadow-xl transition-all duration-300"
             >
-            
-
               <div className="flex gap-1 text-yellow-400">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} size={18} fill="currentColor" />
                 ))}
               </div>
 
-             
               <p className="mt-6 text-gray-600 leading-7">"{item.review}"</p>
-
-    
 
               <div className="flex items-center gap-4 mt-8">
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="w-14 h-14 rounded-full object-cover"
+                  className="w-18 h-18 rounded-full object-cover object-top border-2 border-indigo-100 shadow-md"
                 />
 
                 <div>
