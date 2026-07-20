@@ -4,6 +4,7 @@ import {
   FileText,
   Calendar,
   User,
+  Users,
   LogOut,
   X,
 } from "lucide-react";
@@ -97,7 +98,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <LayoutDashboard size={20} />
             Dashboard
           </NavLink>
-
+          <NavLink
+            to="/teachers"
+            onClick={() => setSidebarOpen(false)}
+            className={({ isActive }) =>
+              `flex items-center gap-3 w-full p-3 rounded-xl transition-all duration-200 ${
+                isActive ? "bg-purple-600 text-white" : "hover:bg-gray-100"
+              }`
+            }
+          >
+            <Users size={20} />
+            Teachers
+          </NavLink>
           <NavLink
             to="/tasks"
             onClick={() => setSidebarOpen(false)}

@@ -11,6 +11,7 @@ import Planner from "./pages/Planner.jsx";
 import Profile from "./pages/Profile.jsx";
 import "react-easy-crop/react-easy-crop.css";
 import Home from "./pages/Home.jsx";
+import Teachers from "./pages/Teachers.jsx";
 
 function App() {
   return (
@@ -26,6 +27,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/teachers"
+          element={
+            <ProtectedRoute>
+              <Teachers />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />

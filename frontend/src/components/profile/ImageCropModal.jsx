@@ -5,7 +5,7 @@ import { X, Loader2 } from "lucide-react";
 const ImageCropModal = ({ image, onClose, onUpload, uploading }) => {
   const editorRef = useRef(null);
 
-  const [zoom, setZoom] = useState(1.2);
+  const [zoom, setZoom] = useState(1.1);
 
   const handleUpload = () => {
     if (!editorRef.current) return;

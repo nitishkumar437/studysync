@@ -19,7 +19,7 @@ const ProfileHero = ({ user, refreshProfile }) => {
     const file = e.target.files?.[0];
 
     if (!file) return;
- 
+
     if (file.size > 5 * 1024 * 1024) {
       toast.error("Image size should be less than 5 MB");
       return;
@@ -115,7 +115,7 @@ const ProfileHero = ({ user, refreshProfile }) => {
         <div className="px-6 sm:px-8 pb-8">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between">
             <div className="flex flex-col sm:flex-row sm:items-center gap-6 -mt-16 sm:-mt-20">
-              <div className="relative mx-auto sm:mx-0">
+              <div className="relative mx-auto sm:mx-0  group">
                 {user?.avatar ? (
                   <img
                     src={user.avatar}
@@ -128,14 +128,25 @@ const ProfileHero = ({ user, refreshProfile }) => {
                   </div>
                 )}
 
-                <button
-                  type="button"
-                  disabled={uploading}
+              
+                <div
+                  className="
+    absolute inset-0
+    rounded-full
+    bg-black/40
+    flex items-center justify-center
+    opacity-0
+    group-hover:opacity-100
+    transition-all duration-300
+    cursor-pointer
+  "
                   onClick={() => fileInputRef.current?.click()}
-                  className="absolute bottom-3 right-3 w-12 h-12 rounded-full bg-white shadow-lg text-indigo-600 hover:bg-indigo-600 hover:text-white transition"
                 >
-                  <Camera size={20} className="mx-auto" />
-                </button>
+                  <div className="flex flex-col items-center text-white">
+                    <Camera size={28} />
+                    <span className="text-xs mt-1 font-medium">Change</span>
+                  </div>
+                </div>
               </div>
 
               <div className="text-center sm:text-left mt-2 sm:mt-12">
