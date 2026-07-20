@@ -1,24 +1,29 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import asyncHandler from "../utils/asyncHandler.js";
-import jwt from "jsonwebtoken";
+import generateToken from "../utils/generateToken.js";
 
+// Register User
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
     return res.status(400).json({
       success: false,
-      message: "All fields are required",
+      message: "All fields are required.",
     });
   }
 
-  const existingUser = await User.findOne({ email });
+  const normalizedEmail = email.toLowerCase().trim();
+
+  const existingUser = await User.findOne({
+    email: normalizedEmail,
+  });
 
   if (existingUser) {
     return res.status(400).json({
       success: false,
-      message: "User already exists",
+      message: "User already exists.",
     });
   }
 
@@ -26,49 +31,46 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const user = await User.create({
     name,
-    email,
+    email: normalizedEmail,
     password: hashedPassword,
   });
 
-  const token = jwt.sign(
-    {
-      id: user._id,
-      email: user.email,
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "7d",
-    },
-  );
+  const token = generateToken(user);
 
   res.status(201).json({
     success: true,
-    message: "Signup Successful",
+    message: "Signup successful.",
     token,
     user: {
       _id: user._id,
       name: user.name,
       email: user.email,
+      role: user.role,
     },
   });
 });
 
+// Login User
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
     return res.status(400).json({
       success: false,
-      message: "Email and Password are required",
+      message: "Email and password are required.",
     });
   }
 
-  const user = await User.findOne({ email });
+  const normalizedEmail = email.toLowerCase().trim();
+
+  const user = await User.findOne({
+    email: normalizedEmail,
+  });
 
   if (!user) {
     return res.status(400).json({
       success: false,
-      message: "Invalid email or password",
+      message: "Invalid email or password.",
     });
   }
 
@@ -77,36 +79,40 @@ const loginUser = asyncHandler(async (req, res) => {
   if (!isMatch) {
     return res.status(400).json({
       success: false,
-      message: "Invalid Password",
+      message: "Invalid email or password.",
     });
   }
-  const token = jwt.sign(
-    {
-      id: user._id,
-      email: user.email,
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "7d",
-    },
-  );
+
+  const token = generateToken(user);
+
   res.status(200).json({
     success: true,
-    message: "Login Successful",
+    message: "Login successful.",
     token,
     user: {
       _id: user._id,
       name: user.name,
       email: user.email,
+      role: user.role,
     },
   });
 });
+
+// Get Current Logged-in User
 const getCurrentUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id).select("-password");
+  const user = await User.findById(req.user._id).select("-password");
+
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found.",
+    });
+  }
 
   res.status(200).json({
     success: true,
     user,
   });
 });
+
 export { registerUser, loginUser, getCurrentUser };

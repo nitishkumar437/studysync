@@ -1,11 +1,16 @@
 import mongoose from "mongoose";
 
-const UserSchema = new mongoose.Schema(
+const instituteSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
       trim: true,
+    },
+
+    logo: {
+      type: String,
+      default: "",
     },
 
     email: {
@@ -16,77 +21,61 @@ const UserSchema = new mongoose.Schema(
       trim: true,
     },
 
-    password: {
-      type: String,
-      required: true,
-    },
-
-    avatar: {
-      type: String,
-      default: "",
-    },
-
-    role: {
-      type: String,
-      enum: ["director", "teacher", "student"],
-      default: "student",
-    },
-
-    institute: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Institute",
-      default: null,
-    },
-
-    college: {
-      type: String,
-      default: "",
-      trim: true,
-    },
-
-    course: {
-      type: String,
-      default: "",
-      trim: true,
-    },
-
-    semester: {
-      type: String,
-      default: "",
-      trim: true,
-    },
-
-    about: {
-      type: String,
-      default: "",
-      trim: true,
-    },
-
     phone: {
       type: String,
       default: "",
       trim: true,
     },
 
-    studyStreak: {
-      type: Number,
-      default: 0,
+    website: {
+      type: String,
+      default: "",
+      trim: true,
     },
 
-    studyHours: {
-      type: Number,
-      default: 0,
+    address: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    city: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    state: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    description: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    director: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+
+    primaryColor: {
+      type: String,
+      default: "#4F46E5",
+    },
+
+    secondaryColor: {
+      type: String,
+      default: "#9333EA",
     },
 
     isActive: {
       type: Boolean,
       default: true,
-    },
-
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      default: null,
     },
   },
   {
@@ -94,6 +83,6 @@ const UserSchema = new mongoose.Schema(
   },
 );
 
-const User = mongoose.model("User", UserSchema);
+const Institute = mongoose.model("Institute", instituteSchema);
 
-export default User;
+export default Institute;
