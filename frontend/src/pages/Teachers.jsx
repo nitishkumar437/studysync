@@ -102,7 +102,7 @@ const Teachers = () => {
             ) : teachers.length === 0 ? (
               <tr>
                 <td colSpan="4" className="text-center py-16 text-gray-500">
-                  No teachers found.
+                  No teacher found.
                 </td>
               </tr>
             ) : (
