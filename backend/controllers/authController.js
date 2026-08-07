@@ -3,53 +3,6 @@ import bcrypt from "bcryptjs";
 import asyncHandler from "../utils/asyncHandler.js";
 import generateToken from "../utils/generateToken.js";
 
-// Register User
-const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
-
-  if (!name || !email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: "All fields are required.",
-    });
-  }
-
-  const normalizedEmail = email.toLowerCase().trim();
-
-  const existingUser = await User.findOne({
-    email: normalizedEmail,
-  });
-
-  if (existingUser) {
-    return res.status(400).json({
-      success: false,
-      message: "User already exists.",
-    });
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = await User.create({
-    name,
-    email: normalizedEmail,
-    password: hashedPassword,
-  });
-
-  const token = generateToken(user);
-
-  res.status(201).json({
-    success: true,
-    message: "Signup successful.",
-    token,
-    user: {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    },
-  });
-});
-
 // Login User
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -63,14 +16,22 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const normalizedEmail = email.toLowerCase().trim();
 
+  // If password has select:false in User model
   const user = await User.findOne({
     email: normalizedEmail,
-  });
+  }).select("+password");
 
   if (!user) {
     return res.status(400).json({
       success: false,
       message: "Invalid email or password.",
+    });
+  }
+
+  if (!user.isActive) {
+    return res.status(403).json({
+      success: false,
+      message: "Your account has been disabled.",
     });
   }
 
@@ -94,13 +55,14 @@ const loginUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      institute: user.institute,
     },
   });
 });
 
 // Get Current Logged-in User
 const getCurrentUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id).select("-password");
+  const user = await User.findById(req.user._id);
 
   if (!user) {
     return res.status(404).json({
@@ -115,4 +77,4 @@ const getCurrentUser = asyncHandler(async (req, res) => {
   });
 });
 
-export { registerUser, loginUser, getCurrentUser };
+export { loginUser, getCurrentUser };

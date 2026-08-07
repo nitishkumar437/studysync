@@ -13,6 +13,7 @@ import plannerRoutes from "./routes/plannerRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import instituteRoutes from "./routes/instituteRoutes.js";
 import teacherRoutes from "./routes/teacherRoutes.js";
+import studentRoutes from "./routes/studentRoutes.js";
 
 connectDB();
 
@@ -29,6 +30,7 @@ app.use("/api/planner", plannerRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/institute", instituteRoutes);
 app.use("/api/teachers", teacherRoutes);
+app.use("/api/students", studentRoutes);
 
 app.get("/", (req, res) => {
   res.send("StudySync API Running...");

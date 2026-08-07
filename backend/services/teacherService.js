@@ -3,7 +3,16 @@ import bcrypt from "bcryptjs";
 
 // Create Teacher
 const createTeacherService = async (data, director) => {
-  const { name, email, password, phone } = data;
+  const {
+    name,
+    email,
+    password,
+    phone,
+    qualification,
+    experience,
+    gender,
+    address,
+  } = data;
 
   // Validation
   if (!name || !email || !password) {
@@ -12,7 +21,7 @@ const createTeacherService = async (data, director) => {
 
   // Check duplicate email
   const existingTeacher = await User.findOne({
-    email: email.toLowerCase(),
+    email: email.toLowerCase().trim(),
   });
 
   if (existingTeacher) {
@@ -25,9 +34,13 @@ const createTeacherService = async (data, director) => {
   // Create Teacher
   const teacher = await User.create({
     name,
-    email: email.toLowerCase(),
+    email: email.toLowerCase().trim(),
     password: hashedPassword,
     phone,
+    qualification,
+    experience,
+    gender,
+    address,
     role: "teacher",
     institute: director.institute,
     createdBy: director._id,
@@ -43,9 +56,7 @@ const getAllTeachersService = async (director) => {
     role: "teacher",
     institute: director.institute,
     isActive: true,
-  })
-    .select("-password")
-    .sort({ createdAt: -1 });
+  }).select("-password");
 
   return teachers;
 };
@@ -67,7 +78,16 @@ const getTeacherByIdService = async (teacherId, director) => {
 };
 // Update Teacher
 const updateTeacherService = async (teacherId, data, director) => {
-  const { name, email, phone, about } = data;
+  const {
+    name,
+    email,
+    phone,
+    about,
+    qualification,
+    experience,
+    gender,
+    address,
+  } = data;
 
   const teacher = await User.findOne({
     _id: teacherId,
@@ -81,7 +101,7 @@ const updateTeacherService = async (teacherId, data, director) => {
   }
 
   // Duplicate email check
-  if (email && email.toLowerCase() !== teacher.email) {
+  if (email && email.toLowerCase().trim() !== teacher.email) {
     const existingTeacher = await User.findOne({
       email: email.toLowerCase(),
       _id: { $ne: teacherId },
@@ -93,10 +113,13 @@ const updateTeacherService = async (teacherId, data, director) => {
 
     teacher.email = email.toLowerCase();
   }
-
   teacher.name = name ?? teacher.name;
   teacher.phone = phone ?? teacher.phone;
   teacher.about = about ?? teacher.about;
+  teacher.qualification = qualification ?? teacher.qualification;
+  teacher.experience = experience ?? teacher.experience;
+  teacher.gender = gender ?? teacher.gender;
+  teacher.address = address ?? teacher.address;
 
   await teacher.save();
 

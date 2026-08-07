@@ -1,17 +1,23 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+
+import "./App.css";
+import "react-easy-crop/react-easy-crop.css";
+
+import { Toaster } from "react-hot-toast";
+
+import Home from "./pages/Home.jsx";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+
 import Dashboard from "./pages/Dashboard";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import "./App.css";
-import { Toaster } from "react-hot-toast";
+import Teachers from "./pages/Teachers.jsx";
+import Students from "./pages/Students.jsx";
 import Notes from "./pages/Notes.jsx";
 import Tasks from "./pages/Tasks.jsx";
 import Planner from "./pages/Planner.jsx";
 import Profile from "./pages/Profile.jsx";
-import "react-easy-crop/react-easy-crop.css";
-import Home from "./pages/Home.jsx";
-import Teachers from "./pages/Teachers.jsx";
+
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function App() {
   return (
@@ -19,6 +25,16 @@ function App() {
       <Toaster position="top-right" />
 
       <Routes>
+        {/* Public Routes */}
+
+        <Route path="/" element={<Home />} />
+
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/signup" element={<Signup />} />
+
+        {/* Protected Routes */}
+
         <Route
           path="/dashboard"
           element={
@@ -37,13 +53,50 @@ function App() {
           }
         />
 
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/notes" element={<Notes />} />
-        <Route path="/tasks" element={<Tasks />} />
-        <Route path="/planner" element={<Planner />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/students"
+          element={
+            <ProtectedRoute>
+              <Students />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/notes"
+          element={
+            <ProtectedRoute>
+              <Notes />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tasks"
+          element={
+            <ProtectedRoute>
+              <Tasks />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/planner"
+          element={
+            <ProtectedRoute>
+              <Planner />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

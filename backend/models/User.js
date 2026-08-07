@@ -19,6 +19,7 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+      select: false,
     },
 
     avatar: {
@@ -63,6 +64,58 @@ const UserSchema = new mongoose.Schema(
     },
 
     phone: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    rollNumber: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    className: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    section: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    parentName: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    parentPhone: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    qualification: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    experience: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
+    gender: {
+      type: String,
+      enum: ["Male", "Female", "Other", ""],
+      default: "",
+    },
+
+    address: {
       type: String,
       default: "",
       trim: true,

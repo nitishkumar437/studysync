@@ -1,7 +1,9 @@
-const API_URL = `${import.meta.env.VITE_API_URL}/api/auth`;
+const AUTH_API = `${import.meta.env.VITE_API_URL}/api/auth`;
+const INSTITUTE_API = `${import.meta.env.VITE_API_URL}/api/institute`;
 
+// Login
 export const loginUser = async (userData) => {
-  const response = await fetch(`${API_URL}/login`, {
+  const response = await fetch(`${AUTH_API}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -12,13 +14,28 @@ export const loginUser = async (userData) => {
   return response.json();
 };
 
-export const signupUser = async (userData) => {
-  const response = await fetch(`${API_URL}/signup`, {
+// Register Institute (Only Once)
+export const registerInstitute = async (instituteData) => {
+  const response = await fetch(`${INSTITUTE_API}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(userData),
+    body: JSON.stringify(instituteData),
+  });
+
+  return response.json();
+};
+
+// Get Current User
+export const getCurrentUser = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${AUTH_API}/me`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 
   return response.json();

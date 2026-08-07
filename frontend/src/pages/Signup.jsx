@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-import { signupUser } from "../services/authService";
+import { registerInstitute } from "../services/authService";
 
 import AuthHeader from "../components/common/AuthHeader";
 import AuthSidePanel from "../components/common/AuthSidePanel";
@@ -12,9 +12,12 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
+    instituteName: "",
+    directorName: "",
+    directorEmail: "",
     password: "",
+    phone: "",
+    address: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -26,27 +29,27 @@ const Signup = () => {
     }));
   };
 
-  const handleSignup = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
       setLoading(true);
 
-      const data = await signupUser(formData);
+      const data = await registerInstitute(formData);
 
       if (data.success) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userName", data.user.name);
 
-        toast.success("Signup Successful");
+        toast.success("Institute Registered Successfully");
 
         navigate("/dashboard");
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong");
+      console.error(error);
+      toast.error(error.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -59,37 +62,51 @@ const Signup = () => {
 
         <div className="bg-white p-6 md:p-10 rounded-3xl shadow-lg w-full max-w-lg">
           <h1 className="text-4xl md:text-5xl font-bold">
-            Create your account
+            Register Your Institute
           </h1>
 
           <p className="text-gray-500 mt-2 mb-8">
-            Free forever for students. No credit card required.
+            Create your institute and Director account.
           </p>
 
-          <form onSubmit={handleSignup} className="space-y-5">
+          <form onSubmit={handleRegister} className="space-y-5">
             <div>
-              <label className="font-medium">Full Name</label>
+              <label className="font-medium">Institute Name</label>
 
               <input
                 type="text"
-                name="name"
-                value={formData.name}
+                name="instituteName"
+                value={formData.instituteName}
                 onChange={handleChange}
-                placeholder="Enter your full name"
+                placeholder="Enter institute name"
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 mt-2 outline-none focus:ring-2 focus:ring-purple-500"
                 required
               />
             </div>
 
             <div>
-              <label className="font-medium">Email</label>
+              <label className="font-medium">Director Name</label>
+
+              <input
+                type="text"
+                name="directorName"
+                value={formData.directorName}
+                onChange={handleChange}
+                placeholder="Enter director name"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 mt-2 outline-none focus:ring-2 focus:ring-purple-500"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="font-medium">Director Email</label>
 
               <input
                 type="email"
-                name="email"
-                value={formData.email}
+                name="directorEmail"
+                value={formData.directorEmail}
                 onChange={handleChange}
-                placeholder="Enter your email"
+                placeholder="Enter director email"
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 mt-2 outline-none focus:ring-2 focus:ring-purple-500"
                 required
               />
@@ -97,23 +114,45 @@ const Signup = () => {
 
             <PasswordInput value={formData.password} onChange={handleChange} />
 
+            <div>
+              <label className="font-medium">Phone</label>
+
+              <input
+                type="text"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="Enter phone number"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 mt-2 outline-none focus:ring-2 focus:ring-purple-500"
+              />
+            </div>
+
+            <div>
+              <label className="font-medium">Address</label>
+
+              <textarea
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                placeholder="Enter institute address"
+                rows={3}
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 mt-2 outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+              />
+            </div>
+
             <button
               type="submit"
               disabled={loading}
               className="w-full bg-purple-600 hover:bg-purple-700 transition text-white py-3 rounded-xl font-semibold disabled:opacity-60"
             >
-              {loading ? "Creating Account..." : "Create Account"}
+              {loading ? "Registering..." : "Register Institute"}
             </button>
           </form>
-
-          <p className="text-sm text-center text-gray-500 mt-5">
-            By signing up you agree to our Terms & Privacy Policy.
-          </p>
 
           <p className="text-center text-gray-500 mt-5">
             Already have an account?
             <Link to="/login" className="text-purple-600 ml-1 hover:underline">
-              Sign In
+              Login
             </Link>
           </p>
         </div>
