@@ -1,34 +1,42 @@
 import { useEffect, useState } from "react";
-import { Plus, Search, Eye, Pencil, UserCircle2, Trash2 } from "lucide-react";
+import { Plus, Search, Eye, Pencil, Trash2, BookOpen } from "lucide-react";
 import toast from "react-hot-toast";
 
 import DashboardLayout from "../components/layout/DashboardLayout";
-import TeacherModal from "../components/teacher/TeacherModal";
-import TeacherDetailsModal from "../components/teacher/TeacherDetailsModal";
-import { getTeachers } from "../services/teacherService";
-import DeleteTeacherModal from "../components/teacher/DeleteTeacherModal";
-const Teachers = () => {
-  const [teachers, setTeachers] = useState([]);
+import SubjectModal from "../components/subject/SubjectModal";
+import SubjectDetailsModal from "../components/subject/SubjectDetailsModal";
+import DeleteSubjectModal from "../components/subject/DeleteSubjectModal";
+
+import { getSubjects } from "../services/subjectService";
+
+const Subjects = () => {
+  const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [openDelete, setOpenDelete] = useState(false);
+
+  const [searchTerm, setSearchTerm] = useState("");
+
   const [openModal, setOpenModal] = useState(false);
   const [mode, setMode] = useState("add");
-  const [openViewModal, setOpenViewModal] = useState(false);
-  const [selectedTeacher, setSelectedTeacher] = useState(null);
 
+  const [openViewModal, setOpenViewModal] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+
+  const [selectedSubject, setSelectedSubject] = useState(null);
+
+  // Fetch Subjects
   useEffect(() => {
-    fetchTeachers();
+    fetchSubjects();
   }, []);
 
-  const fetchTeachers = async () => {
+  const fetchSubjects = async () => {
     try {
       setLoading(true);
 
-      const data = await getTeachers();
+      const data = await getSubjects();
 
-      console.log("Teachers API Response:", data);
+      console.log("Subjects API Response:", data);
 
-      setTeachers(data.teachers || []);
+      setSubjects(data.subjects || []);
     } catch (error) {
       console.error(error);
       toast.error(error.message);
@@ -37,6 +45,16 @@ const Teachers = () => {
     }
   };
 
+  // Search
+  const filteredSubjects = subjects.filter((subject) => {
+    const search = searchTerm.toLowerCase();
+
+    return (
+      subject.name?.toLowerCase().includes(search) ||
+      subject.code?.toLowerCase().includes(search)
+    );
+  });
+
   return (
     <DashboardLayout>
       <div className="min-h-screen bg-gray-50 p-6">
@@ -44,23 +62,25 @@ const Teachers = () => {
 
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Teachers</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Subjects</h1>
 
-            <p className="text-gray-500 mt-1">Manage all institute teachers.</p>
+            <p className="text-gray-500 mt-1">Manage all institute subjects.</p>
           </div>
 
           <button
             onClick={() => {
               setMode("add");
-              setSelectedTeacher(null);
+              setSelectedSubject(null);
               setOpenModal(true);
             }}
             className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-5 py-3 rounded-xl transition"
           >
             <Plus size={20} />
-            Add Teacher
+            Add Subject
           </button>
         </div>
+
+        {/* Search */}
 
         <div className="bg-white rounded-2xl shadow-sm border p-5 mb-6">
           <div className="relative">
@@ -71,19 +91,26 @@ const Teachers = () => {
 
             <input
               type="text"
-              placeholder="Search teacher..."
+              placeholder="Search subject..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-11 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500"
             />
           </div>
         </div>
 
+        {/* Table */}
+
         <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
           <table className="w-full">
             <thead className="bg-gray-100">
               <tr>
-                <th className="text-left p-4">Teacher</th>
-                <th className="text-left p-4">Email</th>
-                <th className="text-left p-4">Phone</th>
+                <th className="text-left p-4">Subject</th>
+
+                <th className="text-left p-4">Code</th>
+
+                <th className="text-left p-4">Description</th>
+
                 <th className="text-center p-4">Actions</th>
               </tr>
             </thead>
@@ -92,58 +119,65 @@ const Teachers = () => {
               {loading ? (
                 <tr>
                   <td colSpan="4" className="text-center py-16 text-gray-500">
-                    Loading teachers...
+                    Loading subjects...
                   </td>
                 </tr>
-              ) : teachers.length === 0 ? (
+              ) : filteredSubjects.length === 0 ? (
                 <tr>
                   <td colSpan="4" className="text-center py-16 text-gray-500">
-                    No teacher found.
+                    {searchTerm
+                      ? "No subject found."
+                      : "No subjects available."}
                   </td>
                 </tr>
               ) : (
-                teachers.map((teacher) => (
+                filteredSubjects.map((subject) => (
                   <tr
-                    key={teacher._id}
+                    key={subject._id}
                     className="border-t hover:bg-gray-50 transition"
                   >
+                    {/* Subject */}
+
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        {teacher.avatar ? (
-                          <img
-                            src={teacher.avatar}
-                            alt={teacher.name}
-                            className="w-10 h-10 rounded-full object-cover border"
-                          />
-                        ) : (
-                          <div className="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center">
-                            <UserCircle2
-                              size={24}
-                              className="text-violet-600"
-                            />
-                          </div>
-                        )}
+                        <div className="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center">
+                          <BookOpen size={21} className="text-violet-600" />
+                        </div>
 
                         <div>
                           <p className="font-semibold text-gray-900">
-                            {teacher.name}
+                            {subject.name}
                           </p>
 
-                          <p className="text-xs text-gray-500">Teacher</p>
+                          <p className="text-xs text-gray-500">Subject</p>
                         </div>
                       </div>
                     </td>
 
-                    <td className="p-4">{teacher.email}</td>
+                    {/* Code */}
 
-                    <td className="p-4">{teacher.phone || "-"}</td>
+                    <td className="p-4">
+                      <span className="px-3 py-1 rounded-lg bg-gray-100 text-gray-700 text-sm font-medium">
+                        {subject.code}
+                      </span>
+                    </td>
+
+                    {/* Description */}
+
+                    <td className="p-4 text-gray-600">
+                      {subject.description || "-"}
+                    </td>
+
+                    {/* Actions */}
 
                     <td className="p-4">
                       <div className="flex items-center justify-center gap-2">
+                        {/* View */}
+
                         <button
-                          title="View Teacher"
+                          title="View Subject"
                           onClick={() => {
-                            setSelectedTeacher(teacher);
+                            setSelectedSubject(subject);
                             setOpenViewModal(true);
                           }}
                           className="p-2 rounded-lg text-blue-600 hover:bg-blue-100 transition"
@@ -151,11 +185,13 @@ const Teachers = () => {
                           <Eye size={18} />
                         </button>
 
+                        {/* Edit */}
+
                         <button
-                          title="Edit Teacher"
+                          title="Edit Subject"
                           onClick={() => {
                             setMode("edit");
-                            setSelectedTeacher(teacher);
+                            setSelectedSubject(subject);
                             setOpenModal(true);
                           }}
                           className="p-2 rounded-lg text-amber-600 hover:bg-amber-100 transition"
@@ -163,10 +199,12 @@ const Teachers = () => {
                           <Pencil size={18} />
                         </button>
 
+                        {/* Delete */}
+
                         <button
-                          title="Delete Teacher"
+                          title="Delete Subject"
                           onClick={() => {
-                            setSelectedTeacher(teacher);
+                            setSelectedSubject(subject);
                             setOpenDelete(true);
                           }}
                           className="p-2 rounded-lg text-red-600 hover:bg-red-100 transition"
@@ -182,37 +220,44 @@ const Teachers = () => {
           </table>
         </div>
 
-        <TeacherModal
+        {/* Add / Edit Subject Modal */}
+
+        <SubjectModal
           open={openModal}
+          mode={mode}
+          subject={selectedSubject}
           onClose={() => {
             setOpenModal(false);
-            setSelectedTeacher(null);
+            setSelectedSubject(null);
           }}
-          onSuccess={fetchTeachers}
-          mode={mode}
-          teacher={selectedTeacher}
+          onSuccess={fetchSubjects}
         />
 
-        <TeacherDetailsModal
+        {/* Subject Details */}
+
+        <SubjectDetailsModal
           open={openViewModal}
-          teacher={selectedTeacher}
+          subject={selectedSubject}
           onClose={() => {
             setOpenViewModal(false);
-            setSelectedTeacher(null);
+            setSelectedSubject(null);
           }}
         />
-        <DeleteTeacherModal
+
+        {/* Delete Subject */}
+
+        <DeleteSubjectModal
           open={openDelete}
-          teacher={selectedTeacher}
+          subject={selectedSubject}
           onClose={() => {
             setOpenDelete(false);
-            setSelectedTeacher(null);
+            setSelectedSubject(null);
           }}
-          onSuccess={fetchTeachers}
+          onSuccess={fetchSubjects}
         />
       </div>
     </DashboardLayout>
   );
 };
 
-export default Teachers;
+export default Subjects;

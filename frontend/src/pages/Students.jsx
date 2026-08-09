@@ -24,17 +24,15 @@ const Students = () => {
   const [openDelete, setOpenDelete] = useState(false);
 
   useEffect(() => {
-    console.log("fetchStudents called");
     fetchStudents();
   }, []);
 
   const fetchStudents = async () => {
     try {
       setLoading(true);
-      console.log("Start");
+
       const data = await getStudents();
 
-      console.log("End", data);
       setStudents(data.students || []);
     } catch (error) {
       console.error(error);
