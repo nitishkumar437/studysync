@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { Plus, Search, Eye, Pencil, UserCircle2, Trash2 } from "lucide-react";
+import {
+  Plus,
+  BookOpen,
+  Search,
+  Eye,
+  Pencil,
+  UserCircle2,
+  Trash2,
+} from "lucide-react";
 import toast from "react-hot-toast";
 
 import DashboardLayout from "../components/layout/DashboardLayout";
@@ -7,6 +15,8 @@ import TeacherModal from "../components/teacher/TeacherModal";
 import TeacherDetailsModal from "../components/teacher/TeacherDetailsModal";
 import { getTeachers } from "../services/teacherService";
 import DeleteTeacherModal from "../components/teacher/DeleteTeacherModal";
+import AssignSubjectModal from "../components/teacher/AssignSubjectModal";
+
 const Teachers = () => {
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,6 +25,7 @@ const Teachers = () => {
   const [mode, setMode] = useState("add");
   const [openViewModal, setOpenViewModal] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState(null);
+  const [openAssignSubject, setOpenAssignSubject] = useState(false);
 
   useEffect(() => {
     fetchTeachers();
@@ -162,7 +173,16 @@ const Teachers = () => {
                         >
                           <Pencil size={18} />
                         </button>
-
+                        <button
+                          title="Assign Subjects"
+                          onClick={() => {
+                            setSelectedTeacher(teacher);
+                            setOpenAssignSubject(true);
+                          }}
+                          className="p-2 rounded-lg text-violet-600 hover:bg-violet-100 transition"
+                        >
+                          <BookOpen size={18} />
+                        </button>
                         <button
                           title="Delete Teacher"
                           onClick={() => {
@@ -201,6 +221,17 @@ const Teachers = () => {
             setSelectedTeacher(null);
           }}
         />
+
+        <AssignSubjectModal
+          open={openAssignSubject}
+          teacher={selectedTeacher}
+          onClose={() => {
+            setOpenAssignSubject(false);
+            setSelectedTeacher(null);
+          }}
+          onSuccess={fetchTeachers}
+        />
+
         <DeleteTeacherModal
           open={openDelete}
           teacher={selectedTeacher}

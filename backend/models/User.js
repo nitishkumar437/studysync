@@ -135,7 +135,15 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
-
+    subjects: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Subject",
+        },
+      ],
+      default: [],
+    },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

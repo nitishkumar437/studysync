@@ -24,7 +24,10 @@ const handleResponse = async (response, message) => {
   return data;
 };
 
+// ======================================================
 // Get All Teachers
+// ======================================================
+
 export const getTeachers = async () => {
   const response = await fetch(API_URL, {
     headers: getHeaders(),
@@ -33,7 +36,10 @@ export const getTeachers = async () => {
   return handleResponse(response, "Failed to fetch teachers");
 };
 
+// ======================================================
 // Get Teacher By ID
+// ======================================================
+
 export const getTeacherById = async (id) => {
   const response = await fetch(`${API_URL}/${id}`, {
     headers: getHeaders(),
@@ -42,7 +48,10 @@ export const getTeacherById = async (id) => {
   return handleResponse(response, "Failed to fetch teacher");
 };
 
+// ======================================================
 // Create Teacher
+// ======================================================
+
 export const createTeacher = async (teacherData) => {
   const response = await fetch(API_URL, {
     method: "POST",
@@ -53,7 +62,10 @@ export const createTeacher = async (teacherData) => {
   return handleResponse(response, "Failed to create teacher");
 };
 
+// ======================================================
 // Update Teacher
+// ======================================================
+
 export const updateTeacher = async (id, teacherData) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
@@ -64,7 +76,10 @@ export const updateTeacher = async (id, teacherData) => {
   return handleResponse(response, "Failed to update teacher");
 };
 
+// ======================================================
 // Delete Teacher
+// ======================================================
+
 export const deleteTeacher = async (id) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
@@ -72,4 +87,36 @@ export const deleteTeacher = async (id) => {
   });
 
   return handleResponse(response, "Failed to delete teacher");
+};
+
+// ======================================================
+// Assign Subjects To Teacher
+// ======================================================
+
+export const assignSubjectsToTeacher = async (teacherId, subjectIds) => {
+  const response = await fetch(`${API_URL}/${teacherId}/subjects`, {
+    method: "PUT",
+    headers: getHeaders(true),
+    body: JSON.stringify({
+      subjectIds,
+    }),
+  });
+
+  return handleResponse(response, "Failed to assign subjects");
+};
+
+// ======================================================
+// Remove Subject From Teacher
+// ======================================================
+
+export const removeSubjectFromTeacher = async (teacherId, subjectId) => {
+  const response = await fetch(
+    `${API_URL}/${teacherId}/subjects/${subjectId}`,
+    {
+      method: "DELETE",
+      headers: getHeaders(),
+    },
+  );
+
+  return handleResponse(response, "Failed to remove subject");
 };
