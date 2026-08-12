@@ -1,4 +1,4 @@
-const API_URL = `${import.meta.env.VITE_API_URL}/api/subjects`;
+const API_URL = `${import.meta.env.VITE_API_URL}/api/classes`;
 
 const getToken = () => localStorage.getItem("token");
 
@@ -32,54 +32,54 @@ const handleResponse = async (response, message) => {
   return data;
 };
 
-// Get All Subjects
-export const getSubjects = async () => {
+// Get All Classes
+export const getClasses = async () => {
   const response = await fetch(API_URL, {
     method: "GET",
     headers: getHeaders(),
   });
 
-  return handleResponse(response, "Failed to fetch subjects");
+  return handleResponse(response, "Failed to fetch classes");
 };
 
-// Get Subject By ID
-export const getSubjectById = async (id) => {
+// Get Class By ID
+export const getClassById = async (id) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "GET",
     headers: getHeaders(),
   });
 
-  return handleResponse(response, "Failed to fetch subject");
+  return handleResponse(response, "Failed to fetch class");
 };
 
-// Create Subject
-export const createSubject = async (subjectData) => {
+// Create Class
+export const createClass = async (classData) => {
   const response = await fetch(API_URL, {
     method: "POST",
     headers: getHeaders(true),
-    body: JSON.stringify(subjectData),
+    body: JSON.stringify(classData),
   });
 
-  return handleResponse(response, "Failed to create subject");
+  return handleResponse(response, "Failed to create class");
 };
 
-// Update Subject
-export const updateSubject = async (id, subjectData) => {
+// Update Class
+export const updateClass = async (id, classData) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
     headers: getHeaders(true),
-    body: JSON.stringify(subjectData),
+    body: JSON.stringify(classData),
   });
 
-  return handleResponse(response, "Failed to update subject");
+  return handleResponse(response, "Failed to update class");
 };
 
-// Delete Subject
-export const deleteSubject = async (id) => {
+// Delete Class
+export const deleteClass = async (id) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
     headers: getHeaders(),
   });
 
-  return handleResponse(response, "Failed to delete subject");
+  return handleResponse(response, "Failed to delete class");
 };

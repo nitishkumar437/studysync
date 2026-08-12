@@ -15,6 +15,7 @@ import instituteRoutes from "./routes/instituteRoutes.js";
 import teacherRoutes from "./routes/teacherRoutes.js";
 import studentRoutes from "./routes/studentRoutes.js";
 import subjectRoutes from "./routes/subjectRoutes.js";
+import classRoutes from "./routes/classRoutes.js";
 
 connectDB();
 
@@ -33,6 +34,8 @@ app.use("/api/institute", instituteRoutes);
 app.use("/api/teachers", teacherRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/subjects", subjectRoutes);
+app.use("/api/classes", classRoutes);
+
 app.get("/", (req, res) => {
   res.send("StudySync API Running...");
 });

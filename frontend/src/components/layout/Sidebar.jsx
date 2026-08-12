@@ -7,6 +7,7 @@ import {
   Users,
   GraduationCap,
   BookOpen,
+  School,
   LogOut,
   X,
 } from "lucide-react";
@@ -139,7 +140,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <BookOpen size={20} />
             Subjects
           </NavLink>
-
+          <NavLink
+            to="/classes"
+            onClick={() => setSidebarOpen(false)}
+            className={({ isActive }) =>
+              `flex items-center gap-3 w-full p-3 rounded-xl transition-all duration-200 ${
+                isActive ? "bg-purple-600 text-white" : "hover:bg-gray-100"
+              }`
+            }
+          >
+            <School size={20} />
+            Classes
+          </NavLink>
           <NavLink
             to="/tasks"
             onClick={() => setSidebarOpen(false)}
