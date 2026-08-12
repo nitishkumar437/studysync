@@ -1,5 +1,14 @@
 import asyncHandler from "../utils/asyncHandler.js";
-import { createInstitute } from "../services/instituteService.js";
+
+import {
+  createInstitute,
+  getInstituteService,
+  updateInstituteService,
+} from "../services/instituteService.js";
+
+// ======================================================
+// Register Institute
+// ======================================================
 
 const registerInstitute = asyncHandler(async (req, res) => {
   const result = await createInstitute(req.body);
@@ -18,4 +27,31 @@ const registerInstitute = asyncHandler(async (req, res) => {
   });
 });
 
-export { registerInstitute };
+// ======================================================
+// Get Institute
+// ======================================================
+
+const getInstitute = asyncHandler(async (req, res) => {
+  const institute = await getInstituteService(req.user);
+
+  res.status(200).json({
+    success: true,
+    institute,
+  });
+});
+
+// ======================================================
+// Update Institute
+// ======================================================
+
+const updateInstitute = asyncHandler(async (req, res) => {
+  const institute = await updateInstituteService(req.body, req.user);
+
+  res.status(200).json({
+    success: true,
+    message: "Institute settings updated successfully.",
+    institute,
+  });
+});
+
+export { registerInstitute, getInstitute, updateInstitute };

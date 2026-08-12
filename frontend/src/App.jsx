@@ -17,8 +17,10 @@ import Tasks from "./pages/Tasks.jsx";
 import Planner from "./pages/Planner.jsx";
 import Profile from "./pages/Profile.jsx";
 import Subjects from "./pages/Subjects.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Classes from "./pages/Classes.jsx";
+import Settings from "./pages/Settings.jsx";
+
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function App() {
   return (
@@ -62,6 +64,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/subjects"
           element={
@@ -70,6 +73,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/classes"
           element={
@@ -78,6 +82,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/notes"
           element={
@@ -110,6 +115,17 @@ function App() {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Settings */}
+
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
             </ProtectedRoute>
           }
         />

@@ -10,6 +10,7 @@ import {
   School,
   LogOut,
   X,
+  Settings,
 } from "lucide-react";
 import logo from "../../assets/logo.png";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -203,6 +204,20 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <User size={20} />
             Profile
           </NavLink>
+
+          <NavLink
+            to="/settings"
+            onClick={() => setSidebarOpen(false)}
+            className={({ isActive }) =>
+              `flex items-center gap-3 w-full p-3 rounded-xl transition-all duration-200 ${
+                isActive ? "bg-purple-600 text-white" : "hover:bg-gray-100"
+              }`
+            }
+          >
+            <Settings size={20} />
+            Settings
+          </NavLink>
+          
         </nav>
 
         <div className="absolute bottom-8 left-5 right-5">

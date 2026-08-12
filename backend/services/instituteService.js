@@ -3,6 +3,10 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
 
+// ======================================================
+// Create Institute
+// ======================================================
+
 const createInstitute = async (data) => {
   const {
     instituteName,
@@ -67,6 +71,7 @@ const createInstitute = async (data) => {
 
   // Link Director to Institute
   institute.director = director._id;
+
   await institute.save();
 
   // Generate JWT
@@ -85,4 +90,128 @@ const createInstitute = async (data) => {
   };
 };
 
-export { createInstitute };
+// ======================================================
+// Get Institute
+// ======================================================
+
+const getInstituteService = async (user) => {
+  if (!user.institute) {
+    throw new Error("Institute not found.");
+  }
+
+  const institute = await Institute.findOne({
+    _id: user.institute,
+    isActive: true,
+  });
+
+  if (!institute) {
+    throw new Error("Institute not found.");
+  }
+
+  return institute;
+};
+
+// ======================================================
+// Update Institute
+// ======================================================
+
+const updateInstituteService = async (data, user) => {
+  if (!user.institute) {
+    throw new Error("Institute not found.");
+  }
+
+  const institute = await Institute.findOne({
+    _id: user.institute,
+    isActive: true,
+  });
+
+  if (!institute) {
+    throw new Error("Institute not found.");
+  }
+
+  const {
+    name,
+    email,
+    phone,
+    address,
+    website,
+    city,
+    state,
+    description,
+    logo,
+    primaryColor,
+    secondaryColor,
+  } = data;
+
+  // Update fields only when provided
+
+  if (name !== undefined) {
+    if (!name.trim()) {
+      throw new Error("Institute name cannot be empty.");
+    }
+
+    institute.name = name.trim();
+  }
+
+  if (email !== undefined) {
+    if (!email.trim()) {
+      throw new Error("Institute email cannot be empty.");
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    // Check duplicate institute email
+    const existingInstitute = await Institute.findOne({
+      email: normalizedEmail,
+      _id: { $ne: institute._id },
+    });
+
+    if (existingInstitute) {
+      throw new Error("Institute email already exists.");
+    }
+
+    institute.email = normalizedEmail;
+  }
+
+  if (phone !== undefined) {
+    institute.phone = phone.trim();
+  }
+
+  if (address !== undefined) {
+    institute.address = address.trim();
+  }
+
+  if (website !== undefined) {
+    institute.website = website.trim();
+  }
+
+  if (city !== undefined) {
+    institute.city = city.trim();
+  }
+
+  if (state !== undefined) {
+    institute.state = state.trim();
+  }
+
+  if (description !== undefined) {
+    institute.description = description.trim();
+  }
+
+  if (logo !== undefined) {
+    institute.logo = logo;
+  }
+
+  if (primaryColor !== undefined) {
+    institute.primaryColor = primaryColor;
+  }
+
+  if (secondaryColor !== undefined) {
+    institute.secondaryColor = secondaryColor;
+  }
+
+  await institute.save();
+
+  return institute;
+};
+
+export { createInstitute, getInstituteService, updateInstituteService };

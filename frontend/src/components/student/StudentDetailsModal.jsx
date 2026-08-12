@@ -1,17 +1,28 @@
-import { X, UserCircle2, Mail, Phone, School, Users } from "lucide-react";
+import {
+  X,
+  UserCircle2,
+  Mail,
+  Phone,
+  School,
+  Users,
+  Layers,
+} from "lucide-react";
 
 const StudentDetailsModal = ({ open, onClose, student }) => {
   if (!open || !student) return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
 
         <div className="flex items-center justify-between border-b p-6">
           <h2 className="text-2xl font-bold">Student Details</h2>
 
-          <button onClick={onClose}>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-lg hover:bg-gray-100 transition"
+          >
             <X size={22} />
           </button>
         </div>
@@ -46,7 +57,7 @@ const StudentDetailsModal = ({ open, onClose, student }) => {
                 <span className="font-medium">Email</span>
               </div>
 
-              <p className="text-gray-700">{student.email || "-"}</p>
+              <p className="text-gray-700 break-all">{student.email || "-"}</p>
             </div>
 
             {/* Phone */}
@@ -79,9 +90,19 @@ const StudentDetailsModal = ({ open, onClose, student }) => {
                 <span className="font-medium">Class</span>
               </div>
 
+              <p className="text-gray-700">{student.className || "-"}</p>
+            </div>
+
+            {/* Section */}
+
+            <div className="border rounded-xl p-4">
+              <div className="flex items-center gap-2 text-violet-600 mb-2">
+                <Layers size={18} />
+                <span className="font-medium">Section</span>
+              </div>
+
               <p className="text-gray-700">
-                {student.className || "-"}
-                {student.section ? ` (${student.section})` : ""}
+                {student.section ? `Section ${student.section}` : "-"}
               </p>
             </div>
 
@@ -120,7 +141,7 @@ const StudentDetailsModal = ({ open, onClose, student }) => {
 
             {/* Address */}
 
-            <div className="border rounded-xl p-4">
+            <div className="border rounded-xl p-4 col-span-2">
               <div className="flex items-center gap-2 text-violet-600 mb-2">
                 <School size={18} />
                 <span className="font-medium">Address</span>
