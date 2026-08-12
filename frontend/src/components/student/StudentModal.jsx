@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 import { createStudent } from "../../services/studentService";
+import { getClasses } from "../../services/classService";
 
 const StudentModal = ({ open, onClose, onSuccess }) => {
   const [loading, setLoading] = useState(false);
+  const [classesLoading, setClassesLoading] = useState(false);
+  const [classes, setClasses] = useState([]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -21,14 +24,68 @@ const StudentModal = ({ open, onClose, onSuccess }) => {
     parentPhone: "",
   });
 
-  if (!open) return null;
+  // ======================================================
+  // Load Classes
+  // ======================================================
+
+  useEffect(() => {
+    if (open) {
+      fetchClasses();
+    }
+  }, [open]);
+
+  const fetchClasses = async () => {
+    try {
+      setClassesLoading(true);
+
+      const data = await getClasses();
+
+      setClasses(data.classes || []);
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message || "Failed to load classes.");
+    } finally {
+      setClassesLoading(false);
+    }
+  };
+
+  // ======================================================
+  // Selected Class
+  // ======================================================
+
+  const selectedClass = classes.find(
+    (item) => item.name === formData.className,
+  );
+
+  const sections = selectedClass?.sections || [];
+
+  // ======================================================
+  // Handle Change
+  // ======================================================
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // When class changes, reset section
+    if (name === "className") {
+      setFormData((prev) => ({
+        ...prev,
+        className: value,
+        section: "",
+      }));
+
+      return;
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
   };
+
+  // ======================================================
+  // Reset Form
+  // ======================================================
 
   const resetForm = () => {
     setFormData({
@@ -45,6 +102,10 @@ const StudentModal = ({ open, onClose, onSuccess }) => {
       parentPhone: "",
     });
   };
+
+  // ======================================================
+  // Submit
+  // ======================================================
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,35 +126,47 @@ const StudentModal = ({ open, onClose, onSuccess }) => {
 
       const res = await createStudent(formData);
 
-      toast.success(res.message);
+      toast.success(res.message || "Student created successfully.");
 
       resetForm();
 
       onClose();
-
       onSuccess();
     } catch (error) {
+      console.error(error);
       toast.error(error.message);
     } finally {
       setLoading(false);
     }
   };
 
+  if (!open) return null;
+
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-3xl">
+
         {/* Header */}
 
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-2xl font-bold">Add Student</h2>
+          <h2 className="text-2xl font-bold">
+            Add Student
+          </h2>
 
-          <button onClick={onClose}>
+          <button
+            onClick={onClose}
+            disabled={loading}
+            className="disabled:opacity-50"
+          >
             <X size={22} />
           </button>
         </div>
 
+        {/* Form */}
+
         <form onSubmit={handleSubmit} className="p-6">
           <div className="grid grid-cols-2 gap-5">
+
             {/* Student Name */}
 
             <div>
@@ -107,6 +180,7 @@ const StudentModal = ({ open, onClose, onSuccess }) => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
+                disabled={loading}
                 className="w-full mt-2 border rounded-xl px-4 py-3"
               />
             </div>
@@ -124,6 +198,7 @@ const StudentModal = ({ open, onClose, onSuccess }) => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
+                disabled={loading}
                 className="w-full mt-2 border rounded-xl px-4 py-3"
               />
             </div>
@@ -141,6 +216,7 @@ const StudentModal = ({ open, onClose, onSuccess }) => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
+                disabled={loading}
                 className="w-full mt-2 border rounded-xl px-4 py-3"
               />
             </div>
@@ -158,6 +234,7 @@ const StudentModal = ({ open, onClose, onSuccess }) => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
+                disabled={loading}
                 className="w-full mt-2 border rounded-xl px-4 py-3"
               />
             </div>
@@ -175,6 +252,7 @@ const StudentModal = ({ open, onClose, onSuccess }) => {
                 name="rollNumber"
                 value={formData.rollNumber}
                 onChange={handleChange}
+                disabled={loading}
                 className="w-full mt-2 border rounded-xl px-4 py-3"
               />
             </div>
@@ -187,56 +265,118 @@ const StudentModal = ({ open, onClose, onSuccess }) => {
                 <span className="text-red-500">*</span>
               </label>
 
-              <input
-                type="text"
+              <select
                 name="className"
                 value={formData.className}
                 onChange={handleChange}
-                className="w-full mt-2 border rounded-xl px-4 py-3"
-              />
+                disabled={loading || classesLoading}
+                className="w-full mt-2 border rounded-xl px-4 py-3 bg-white disabled:bg-gray-100"
+              >
+                <option value="">
+                  {classesLoading
+                    ? "Loading classes..."
+                    : "Select Class"}
+                </option>
+
+                {classes.map((item) => (
+                  <option
+                    key={item._id}
+                    value={item.name}
+                  >
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+
+              {!classesLoading && classes.length === 0 && (
+                <p className="text-xs text-red-500 mt-1">
+                  No classes available. Please create a class first.
+                </p>
+              )}
             </div>
+
             {/* Section */}
 
             <div>
-              <label className="font-medium">Section</label>
+              <label className="font-medium">
+                Section
+              </label>
 
-              <input
-                type="text"
+              <select
                 name="section"
                 value={formData.section}
                 onChange={handleChange}
-                className="w-full mt-2 border rounded-xl px-4 py-3"
-              />
+                disabled={
+                  loading ||
+                  !formData.className ||
+                  sections.length === 0
+                }
+                className="w-full mt-2 border rounded-xl px-4 py-3 bg-white disabled:bg-gray-100"
+              >
+                <option value="">
+                  {!formData.className
+                    ? "Select Class First"
+                    : sections.length === 0
+                      ? "No Section Available"
+                      : "Select Section"}
+                </option>
+
+                {sections.map((section) => (
+                  <option
+                    key={section}
+                    value={section}
+                  >
+                    Section {section}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Gender */}
 
             <div>
-              <label className="font-medium">Gender</label>
+              <label className="font-medium">
+                Gender
+              </label>
 
               <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
+                disabled={loading}
                 className="w-full mt-2 border rounded-xl px-4 py-3"
               >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
+                <option value="">
+                  Select Gender
+                </option>
+
+                <option value="Male">
+                  Male
+                </option>
+
+                <option value="Female">
+                  Female
+                </option>
+
+                <option value="Other">
+                  Other
+                </option>
               </select>
             </div>
 
             {/* Parent Name */}
 
             <div>
-              <label className="font-medium">Parent Name</label>
+              <label className="font-medium">
+                Parent Name
+              </label>
 
               <input
                 type="text"
                 name="parentName"
                 value={formData.parentName}
                 onChange={handleChange}
+                disabled={loading}
                 className="w-full mt-2 border rounded-xl px-4 py-3"
               />
             </div>
@@ -244,13 +384,16 @@ const StudentModal = ({ open, onClose, onSuccess }) => {
             {/* Parent Phone */}
 
             <div>
-              <label className="font-medium">Parent Phone</label>
+              <label className="font-medium">
+                Parent Phone
+              </label>
 
               <input
                 type="text"
                 name="parentPhone"
                 value={formData.parentPhone}
                 onChange={handleChange}
+                disabled={loading}
                 className="w-full mt-2 border rounded-xl px-4 py-3"
               />
             </div>
@@ -258,13 +401,16 @@ const StudentModal = ({ open, onClose, onSuccess }) => {
             {/* Address */}
 
             <div className="col-span-2">
-              <label className="font-medium">Address</label>
+              <label className="font-medium">
+                Address
+              </label>
 
               <textarea
                 rows="3"
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
+                disabled={loading}
                 className="w-full mt-2 border rounded-xl px-4 py-3 resize-none"
               />
             </div>
@@ -273,25 +419,34 @@ const StudentModal = ({ open, onClose, onSuccess }) => {
           {/* Footer */}
 
           <div className="flex justify-end gap-3 mt-8 border-t pt-6">
+
             <button
               type="button"
               onClick={() => {
                 resetForm();
                 onClose();
               }}
-              className="px-5 py-3 rounded-xl border hover:bg-gray-100 transition"
+              disabled={loading}
+              className="px-5 py-3 rounded-xl border hover:bg-gray-100 transition disabled:opacity-50"
             >
               Cancel
             </button>
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || classesLoading}
               className="bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl flex items-center gap-2 disabled:opacity-60"
             >
-              {loading && <Loader2 size={18} className="animate-spin" />}
+              {loading && (
+                <Loader2
+                  size={18}
+                  className="animate-spin"
+                />
+              )}
 
-              {loading ? "Creating..." : "Save Student"}
+              {loading
+                ? "Creating..."
+                : "Save Student"}
             </button>
           </div>
         </form>
