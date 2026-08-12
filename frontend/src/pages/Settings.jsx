@@ -112,7 +112,7 @@ const Settings = () => {
       toast.success(
         response.message || "Institute settings updated successfully.",
       );
-
+      window.dispatchEvent(new Event("instituteUpdated"));
       // Refresh latest data
       await fetchInstitute();
     } catch (error) {
