@@ -2,7 +2,7 @@ import express from "express";
 
 import authMiddleware from "../middleware/authMiddleware.js";
 import verifyRole from "../middleware/verifyRole.js";
-
+import upload from "../middleware/upload.js";
 import {
   registerInstitute,
   getInstitute,
@@ -34,6 +34,7 @@ router.put(
   "/settings",
   authMiddleware,
   verifyRole("director"),
+  upload.single("logo"),
   updateInstitute,
 );
 

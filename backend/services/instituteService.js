@@ -2,6 +2,8 @@ import Institute from "../models/Institute.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
+import cloudinary from "../config/cloudinary.js";
+import streamifier from "streamifier";
 
 // ======================================================
 // Create Institute
@@ -115,7 +117,7 @@ const getInstituteService = async (user) => {
 // Update Institute
 // ======================================================
 
-const updateInstituteService = async (data, user) => {
+const updateInstituteService = async (data, user, file) => {
   if (!user.institute) {
     throw new Error("Institute not found.");
   }
@@ -138,7 +140,7 @@ const updateInstituteService = async (data, user) => {
     city,
     state,
     description,
-    logo,
+     
     primaryColor,
     secondaryColor,
   } = data;
@@ -197,8 +199,25 @@ const updateInstituteService = async (data, user) => {
     institute.description = description.trim();
   }
 
-  if (logo !== undefined) {
-    institute.logo = logo;
+  if (file) {
+    const uploadResult = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          folder: "StudySync/Institute",
+        },
+        (error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        },
+      );
+
+      streamifier.createReadStream(file.buffer).pipe(stream);
+    });
+
+    institute.logo = uploadResult.secure_url;
   }
 
   if (primaryColor !== undefined) {

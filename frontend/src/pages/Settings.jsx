@@ -107,6 +107,7 @@ const Settings = () => {
         email: formData.email.trim(),
         phone: formData.phone.trim(),
         address: formData.address.trim(),
+        logo,
       });
 
       toast.success(
@@ -120,6 +121,7 @@ const Settings = () => {
       toast.error(error.message);
     } finally {
       setSaving(false);
+      setLogo(null);
     }
   };
 

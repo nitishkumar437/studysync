@@ -45,7 +45,7 @@ const getInstitute = asyncHandler(async (req, res) => {
 // ======================================================
 
 const updateInstitute = asyncHandler(async (req, res) => {
-  const institute = await updateInstituteService(req.body, req.user);
+  const institute = await updateInstituteService(req.body, req.user, req.file);
 
   res.status(200).json({
     success: true,

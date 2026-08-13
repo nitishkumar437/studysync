@@ -2,17 +2,9 @@ const API_URL = `${import.meta.env.VITE_API_URL}/api/institute`;
 
 const getToken = () => localStorage.getItem("token");
 
-const getHeaders = (isJson = false) => {
-  const headers = {
-    Authorization: `Bearer ${getToken()}`,
-  };
-
-  if (isJson) {
-    headers["Content-Type"] = "application/json";
-  }
-
-  return headers;
-};
+const getHeaders = () => ({
+  Authorization: `Bearer ${getToken()}`,
+});
 
 const handleResponse = async (response, message) => {
   const contentType = response.headers.get("content-type");
@@ -33,6 +25,7 @@ const handleResponse = async (response, message) => {
 };
 
 // Get Institute Settings
+
 export const getInstitute = async () => {
   const response = await fetch(`${API_URL}/settings`, {
     method: "GET",
@@ -43,11 +36,23 @@ export const getInstitute = async () => {
 };
 
 // Update Institute Settings
+
 export const updateInstitute = async (instituteData) => {
+  const formData = new FormData();
+
+  formData.append("name", instituteData.name);
+  formData.append("email", instituteData.email);
+  formData.append("phone", instituteData.phone);
+  formData.append("address", instituteData.address);
+
+  if (instituteData.logo) {
+    formData.append("logo", instituteData.logo);
+  }
+
   const response = await fetch(`${API_URL}/settings`, {
     method: "PUT",
-    headers: getHeaders(true),
-    body: JSON.stringify(instituteData),
+    headers: getHeaders(),
+    body: formData,
   });
 
   return handleResponse(response, "Failed to update institute settings");
