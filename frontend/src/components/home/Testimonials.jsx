@@ -1,10 +1,11 @@
 import { Star } from "lucide-react";
 import nitish from "..//../assets/nitish.png";
+import rahul from "..//../assets/rahul.png";
 const testimonials = [
   {
     name: "Rahul Kumar",
     course: "BCA Student",
-    image: "https://i.pravatar.cc/150?img=12",
+    image: rahul,
     review:
       "StudySync completely changed how I organize my notes and assignments. The dashboard is clean, fast and very easy to use.",
   },

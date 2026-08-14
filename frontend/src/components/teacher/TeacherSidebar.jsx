@@ -5,68 +5,138 @@ import {
   CheckSquare,
   User,
   LogOut,
+  X,
 } from "lucide-react";
 
 import { NavLink, useNavigate } from "react-router-dom";
 
-const TeacherSidebar = () => {
+const TeacherSidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const navigate = useNavigate();
 
   const handleSignout = () => {
-    localStorage.removeItem("token");
+    localStorage.clear();
+
+    setSidebarOpen(false);
 
     navigate("/login");
   };
 
-  return (
-    <aside className="fixed left-0 top-0 h-screen w-60 border-r bg-white p-5">
-      <h1 className="mb-10 text-xl font-bold">Teacher Panel</h1>
+  const navClass = ({ isActive }) =>
+    `flex items-center gap-3 w-full p-3 rounded-xl transition-all duration-200 ${
+      isActive ? "bg-purple-600 text-white" : "hover:bg-gray-100 text-gray-700"
+    }`;
 
-      <nav className="space-y-3">
-        <NavLink to="/teacher/dashboard">
-          <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100">
+  return (
+    <>
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      <aside
+        className={`
+          fixed
+          top-0
+          left-0
+          h-screen
+          w-60
+          bg-white
+          border-r
+          border-gray-200
+          p-5
+          z-50
+          transform
+          transition-transform
+          duration-300
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          lg:translate-x-0
+        `}
+      >
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold">Teacher Panel</h1>
+
+            <p className="text-sm text-gray-500">Teacher</p>
+          </div>
+
+          <button
+            className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
+            onClick={() => setSidebarOpen(false)}
+          >
+            <X size={22} />
+          </button>
+        </div>
+
+        <nav className="mt-10 space-y-3">
+          <NavLink
+            to="/teacher-dashboard"
+            className={navClass}
+            onClick={() => setSidebarOpen(false)}
+          >
             <LayoutDashboard size={20} />
             Dashboard
-          </div>
-        </NavLink>
+          </NavLink>
 
-        <NavLink to="/teacher/subjects">
-          <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100">
+          <NavLink
+            to="/teacher/subjects"
+            className={navClass}
+            onClick={() => setSidebarOpen(false)}
+          >
             <BookOpen size={20} />
             Subjects
-          </div>
-        </NavLink>
+          </NavLink>
 
-        <NavLink to="/teacher/notes">
-          <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100">
+          <NavLink
+            to="/notes"
+            className={navClass}
+            onClick={() => setSidebarOpen(false)}
+          >
             <FileText size={20} />
             Notes
-          </div>
-        </NavLink>
+          </NavLink>
 
-        <NavLink to="/teacher/tasks">
-          <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100">
+          <NavLink
+            to="/tasks"
+            className={navClass}
+            onClick={() => setSidebarOpen(false)}
+          >
             <CheckSquare size={20} />
             Tasks
-          </div>
-        </NavLink>
+          </NavLink>
 
-        <NavLink to="/teacher/profile">
-          <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100">
+          <NavLink
+            to="/profile"
+            className={navClass}
+            onClick={() => setSidebarOpen(false)}
+          >
             <User size={20} />
             Profile
-          </div>
-        </NavLink>
-      </nav>
+          </NavLink>
+        </nav>
 
-      <button
-        onClick={handleSignout}
-        className="absolute bottom-8 flex items-center gap-3 text-red-500"
-      >
-        <LogOut size={20} />
-        Sign Out
-      </button>
-    </aside>
+        <div className="absolute bottom-8 left-5 right-5">
+          <button
+            onClick={handleSignout}
+            className="
+              flex
+              items-center
+              gap-3
+              w-full
+              p-3
+              rounded-xl
+              text-red-500
+              hover:bg-red-50
+              transition
+            "
+          >
+            <LogOut size={20} />
+            Sign Out
+          </button>
+        </div>
+      </aside>
+    </>
   );
 };
 
