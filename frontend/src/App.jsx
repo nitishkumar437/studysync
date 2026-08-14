@@ -5,22 +5,30 @@ import "react-easy-crop/react-easy-crop.css";
 
 import { Toaster } from "react-hot-toast";
 
-import Home from "./pages/Home.jsx";
+// Public Pages
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
+// Dashboard Pages
 import Dashboard from "./pages/Dashboard";
-import Teachers from "./pages/Teachers.jsx";
-import Students from "./pages/Students.jsx";
-import Notes from "./pages/Notes.jsx";
-import Tasks from "./pages/Tasks.jsx";
-import Planner from "./pages/Planner.jsx";
-import Profile from "./pages/Profile.jsx";
-import Subjects from "./pages/Subjects.jsx";
-import Classes from "./pages/Classes.jsx";
-import Settings from "./pages/Settings.jsx";
+import TeacherDashboard from "./pages/TeacherDashboard";
+import StudentDashboard from "./pages/StudentDashboard";
 
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
+// Director Pages
+import Teachers from "./pages/Teachers";
+import Students from "./pages/Students";
+import Subjects from "./pages/Subjects";
+import Classes from "./pages/Classes";
+import Settings from "./pages/Settings";
+
+// Common Pages
+import Notes from "./pages/Notes";
+import Tasks from "./pages/Tasks";
+import Planner from "./pages/Planner";
+import Profile from "./pages/Profile";
+
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -28,7 +36,9 @@ function App() {
       <Toaster position="top-right" />
 
       <Routes>
-        {/* Public Routes */}
+        {/* ================================================= */}
+        {/* PUBLIC ROUTES */}
+        {/* ================================================= */}
 
         <Route path="/" element={<Home />} />
 
@@ -36,12 +46,14 @@ function App() {
 
         <Route path="/signup" element={<Signup />} />
 
-        {/* Protected Routes */}
+        {/* ================================================= */}
+        {/* DIRECTOR ROUTES */}
+        {/* ================================================= */}
 
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["director"]}>
               <Dashboard />
             </ProtectedRoute>
           }
@@ -50,7 +62,7 @@ function App() {
         <Route
           path="/teachers"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["director"]}>
               <Teachers />
             </ProtectedRoute>
           }
@@ -59,7 +71,7 @@ function App() {
         <Route
           path="/students"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["director"]}>
               <Students />
             </ProtectedRoute>
           }
@@ -68,7 +80,7 @@ function App() {
         <Route
           path="/subjects"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["director"]}>
               <Subjects />
             </ProtectedRoute>
           }
@@ -77,16 +89,55 @@ function App() {
         <Route
           path="/classes"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["director"]}>
               <Classes />
             </ProtectedRoute>
           }
         />
 
         <Route
+          path="/settings"
+          element={
+            <ProtectedRoute allowedRoles={["director"]}>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ================================================= */}
+        {/* TEACHER ROUTES */}
+        {/* ================================================= */}
+
+        <Route
+          path="/teacher-dashboard"
+          element={
+            <ProtectedRoute allowedRoles={["teacher"]}>
+              <TeacherDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ================================================= */}
+        {/* STUDENT ROUTES */}
+        {/* ================================================= */}
+
+        <Route
+          path="/student-dashboard"
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <StudentDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ================================================= */}
+        {/* COMMON ROUTES */}
+        {/* ================================================= */}
+
+        <Route
           path="/notes"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["director", "teacher", "student"]}>
               <Notes />
             </ProtectedRoute>
           }
@@ -95,7 +146,7 @@ function App() {
         <Route
           path="/tasks"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["director", "teacher", "student"]}>
               <Tasks />
             </ProtectedRoute>
           }
@@ -104,7 +155,7 @@ function App() {
         <Route
           path="/planner"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["director", "teacher", "student"]}>
               <Planner />
             </ProtectedRoute>
           }
@@ -113,19 +164,8 @@ function App() {
         <Route
           path="/profile"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["director", "teacher", "student"]}>
               <Profile />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Settings */}
-
-        <Route
-          path="/settings"
-          element={
-            <ProtectedRoute>
-              <Settings />
             </ProtectedRoute>
           }
         />

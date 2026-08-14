@@ -33,19 +33,45 @@ const Login = () => {
 
       const data = await loginUser(formData);
 
-      if (data.success) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userName", data.user.name);
+      if (!data.success) {
+        toast.error(data.message || "Login failed.");
+        return;
+      }
 
-        toast.success("Login Successful");
+      const user = data.user;
 
+      // ==========================================
+      // Save authentication data
+      // ==========================================
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userName", user.name);
+      localStorage.setItem("role", user.role);
+
+      // Optional user information
+      localStorage.setItem("userId", user._id);
+
+      toast.success("Login Successful");
+
+      // ==========================================
+      // Role Based Redirect
+      // ==========================================
+
+      if (user.role === "director") {
         navigate("/dashboard");
+      } else if (user.role === "teacher") {
+        navigate("/teacher-dashboard");
+      } else if (user.role === "student") {
+        navigate("/student-dashboard");
       } else {
-        toast.error(data.message);
+        toast.error("Invalid user role.");
+        localStorage.clear();
+        navigate("/login");
       }
     } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong");
+      console.error(error);
+
+      toast.error(error.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -53,7 +79,8 @@ const Login = () => {
 
   return (
     <div className="h-screen flex flex-col lg:flex-row bg-gray-100 overflow-hidden">
-   
+      {/* Login Section */}
+
       <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-4">
         <AuthHeader />
 
@@ -65,6 +92,8 @@ const Login = () => {
           </p>
 
           <form onSubmit={handleLogin} className="space-y-5">
+            {/* Email */}
+
             <div>
               <label className="font-medium">Email</label>
 
@@ -79,7 +108,11 @@ const Login = () => {
               />
             </div>
 
+            {/* Password */}
+
             <PasswordInput value={formData.password} onChange={handleChange} />
+
+            {/* Login Button */}
 
             <button
               type="submit"
@@ -90,9 +123,13 @@ const Login = () => {
             </button>
           </form>
 
+          {/* Google */}
+
           <button className="w-full border border-gray-200 py-3 rounded-xl mt-4 hover:bg-gray-100 transition">
             Continue with Google
           </button>
+
+          {/* Signup */}
 
           <p className="text-center text-gray-500 mt-5">
             Don't have an account?
@@ -102,12 +139,15 @@ const Login = () => {
           </p>
         </div>
 
+        {/* Back Home */}
+
         <Link to="/" className="mt-8 text-gray-500 text-sm hover:text-black">
           ← Back to Home
         </Link>
       </div>
 
-      
+      {/* Right Side */}
+
       <AuthSidePanel />
     </div>
   );
